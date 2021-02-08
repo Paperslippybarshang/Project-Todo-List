@@ -1,5 +1,6 @@
 :root {
   --theme-color: #25b99a;
+  --background-color: #e9f0ee;
 }
 
 body {
@@ -24,7 +25,7 @@ input {
 }
 
 .input {
-  width: 90%;
+  width: 95%;
   height: 55px;
   border-style: none;
   border-radius: 7px 30px 30px 7px;
@@ -47,7 +48,7 @@ input {
 }
 
 .input[type="text"] {
-  padding: 0 20px 0 20px;
+  padding: 0 70px 0 15px;
 }
 
 .submit-button {
@@ -56,13 +57,17 @@ input {
   border-style: none;
   border-radius: 100%;
   position: absolute;
-  right: 15px;
+  right: 10px;
 }
 
 .submit-button svg {
   width: 15px;
   height: 15px;
   transform: translate(0, 10%);
+}
+
+.submit-button svg .fill {
+  fill: var(--theme-color);
 }
 
 .submit-button:focus {
@@ -73,13 +78,13 @@ input {
 
 .list {
   list-style: none;
-  padding: 0 20px 0 20px;
+  padding: 0 10px 0 10px;
 }
 
 .list_items {
   display: flex;
   align-items: center;
-  padding: 10px 0 10px 20px;
+  padding: 10px 0 10px 15px;
   margin: 10px 0 10px 0;
   border-radius: 7px;
   box-shadow: 0 4px 7px 1px #d4d3d3;
@@ -92,28 +97,67 @@ input {
   display: flex;
   align-items: center;
   position: absolute;
-  right: 20px;
+  right: 10px;
 }
 
 .delete {
   padding: 0;
+  margin-right: 8px;
   border-style: none;
   background-color: transparent;
   width: 20px;
   height: 20px;
 }
 
+/* Delete Button */
+.delete:focus {
+  outline: none;
+}
+
+.delete svg {
+  fill: #c0cecb;
+}
+
+.delete:hover svg .fill {
+  fill: #f84343;
+}
+
+.divider {
+  width: 1px;
+  height: 20px;
+  background-color: #c0cecb;
+}
+
+/* Complete Button */
 .complete {
   padding: 0;
-  margin: 0 10px 0 10px;
-  border: solid 0.1px #7a7a7a;
-  border-radius: 100%;
+  margin: 0 8px 0 8px;
+  border: none;
+  /* border: solid 0.1px var(--theme-color);
+  border-radius: 100%; */
   background-color: transparent;
   width: 20px;
   height: 20px;
 }
-/* 
+
+.complete:focus,
+.complete:focus svg .fill {
+  outline: none;
+  fill: white;
+}
+
+.complete:focus svg .noFill {
+  fill: var(--theme-color);
+}
+
 .complete svg {
-  height: 20px;
-  width: 20px;
-} */
+  border: solid 1px var(--theme-color);
+  border-radius: 100%;
+}
+.complete svg .fill {
+  fill: var(--theme-color);
+}
+
+.complete svg .noFill {
+  fill: none;
+}
