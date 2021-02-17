@@ -5,7 +5,7 @@ const completeButton = `<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xm
 
 
 
-// Write a function that accepts input value and creates <li> element in HTML file.
+// Write a function that accepts input value and creates <li> element in the DOM Tree.
 const createListElement = (item) => {
   const list = document.querySelector('ul');
   
@@ -35,7 +35,7 @@ form.addEventListener('submit', event => {
   const input = document.querySelector('.input');
   event.preventDefault(); // prevent app from auto-refreshing
   const item = input.value.trim();
-  // call addToList function to append the item to the array - listItems[]
+  // call createListElement() to add input value as a list item.
   if(item !== '') {
     createListElement(item);
     input.value = ''; // resets the value
