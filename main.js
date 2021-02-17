@@ -5,7 +5,7 @@ const completeButton = `<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xm
 
 
 
-// Write a function that accepts list object and creates <li> element in HTML file.
+// Write a function that accepts input value and creates <li> element in HTML file.
 const createListElement = (item) => {
   const list = document.querySelector('ul');
   
