@@ -95,6 +95,10 @@ input {
   font-size: 13px;
 }
 
+.list_items.completed {
+  text-decoration: line-through;
+}
+
 .list_buttons {
   display: flex;
   align-items: center;
@@ -118,6 +122,7 @@ input {
 
 .delete svg {
   fill: #c0cecb;
+  pointer-events: none;
 }
 
 .delete:hover svg .fill {
@@ -135,6 +140,7 @@ input {
   padding: 0;
   margin: 0 8px 0 8px;
   border: none;
+  outline: none;
   /* border: solid 0.1px var(--theme-color);
   border-radius: 100%; */
   background-color: transparent;
@@ -142,19 +148,20 @@ input {
   height: 20px;
 }
 
-.complete:focus,
-.complete:focus svg .fill {
+.complete.completed,
+.complete.completed svg .fill {
   outline: none;
   fill: white;
 }
 
-.complete:focus svg .noFill {
+.complete.completed svg .noFill {
   fill: var(--theme-color);
 }
 
 .complete svg {
   border: solid 1px var(--theme-color);
   border-radius: 100%;
+  pointer-events: none;
 }
 .complete svg .fill {
   fill: var(--theme-color);
