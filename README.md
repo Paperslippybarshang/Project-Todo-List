@@ -1,5 +1,5 @@
 # Project-Shopping-List
-https://paperslippybarshang.github.io/Project-Todo-List/
+https://paperslippybarshang.github.io/Project-Todo-List/<br>
 This is a shopping list projected made as part of the DOM Manipulation excercise. 
 
 ![image](https://user-images.githubusercontent.com/44216709/108302746-98480800-7172-11eb-85ce-c00184b27ac3.png)
