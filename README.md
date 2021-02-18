@@ -5,12 +5,6 @@ This is a shopping list projected made as part of the DOM Manipulation excercise
 
 
 
-
-
-
-
-
-
 #### Source
 
 The design is based on the UI template provided by a youtuber, [Max Sandelin](https://www.youtube.com/watch?v=2wCpkOk2uCg&ab_channel=MaxSandelin)
