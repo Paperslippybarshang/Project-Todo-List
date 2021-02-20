@@ -6,27 +6,41 @@ const completeButton = `<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xm
 
 
 // Write a function that accepts input value and creates <li> element in the DOM Tree.
-const createListElement = (item) => {
+const createListElement = (listObj) => {
   const list = document.querySelector('ul');
-  
-  // create a list element.
   const li = document.createElement('li');
   li.setAttribute('class', 'list_items');
+  li.setAttribute('id', listObj.id);
   li.innerHTML = `
-    ${item}
+    ${listObj.text}
     <div class="list_buttons">
-      <button type="button" class="delete">
+      <button type="button" class="delete" id="${listObj.id}">
         ${deleteButton}
       </button>
       <div class="divider"></div>
-      <button type="button" class="complete">
+      <button type="button" class="complete" id="${listObj.id}">
         ${completeButton}
       </button>
     </div>
   `
   list.append(li);
-  
-}
+};
+
+
+const listItems = [];
+// Write a function that creates listObj and renders the list items.
+const renderTodo = (item) => {
+  const listObj = {
+    id: Date.now(),
+    text: item
+
+  };
+  // append the listObject to the listItems array
+  listItems.push(listObj);
+  // Every time the listItems array gets updated, store it in localStorage.
+  localStorage.setItem(`listItems`, JSON.stringify(listItems));
+  createListElement(listObj);
+};
 
 // Event-submit
 const form = document.querySelector('.form');
@@ -37,41 +51,48 @@ form.addEventListener('submit', event => {
   const item = input.value.trim();
   // call createListElement() to add input value as a list item.
   if(item !== '') {
-    createListElement(item);
+    renderTodo(item);
     input.value = ''; // resets the value
     input.focus(); // removes the focus
   }
 });
 
 // Event-Delete/Complete
-const list = document.querySelector('ul');
 // Listens for click event on the list item.
+const list = document.querySelector('ul');
 list.addEventListener('click', event => {
+  const target = event.target
+  const parentElement = list.querySelector(`[id='${target.id}']`); // Find the parent element of the target using the target id and store up in parentElement.
   // if clicked element(button) contains 'complete' class,
-  if(event.target.classList.contains('complete')) {
+  if(target.classList.contains('complete')) {
     // add 'completed' class to the button and cross out the item
-    event.target.classList.toggle('completed')
-    event.target.parentNode.parentNode.classList.toggle('completed')
+    target.classList.toggle('completed')
+    parentElement.classList.toggle('completed')
   }
   // if clicked element(button) contains 'delete' class,
-  if(event.target.classList.contains('delete')) {
+  if(target.classList.contains('delete')) {
     //remove the entire list item.
-    event.target.parentNode.parentNode.remove()
+    parentElement.remove();
+    for (x of listItems) {
+      if(x.id === target.id){
+          listItems.pop(x)
+          
+          // localStorage.setItem(`listItems`, JSON.stringify(listItems));
+      }
+      else {
+        console.log(`${typeof x.id} ${typeof target.id}`)
+      }
+    }
+    console.log(listItems)
+
   }
 })
 
-
-//Unused Code
-// Create an array that will store the list elements
-// const listItems = [];
-// Write a function that will create a list object, add the list elements to the array and render them.
-// const addToList = (item) => {
-  // Create an object to store the list items
-  // const listObj = {
-  //   item,
-  //   completed: false
-  // };
-  // listItems.push(listObj);
-//   createListElement(item);
-// }
-
+// If listItems is stored in the local storage, re-create the list elements 
+if(localStorage.listItems !== undefined) {
+  const storedList = JSON.parse(localStorage.listItems)
+  for (listObj of storedList) {
+    listItems.push(listObj); // Populate the listItems array with listObj from localStorage
+    createListElement(listObj);
+  };
+}
