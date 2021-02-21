@@ -9,7 +9,12 @@ const completeButton = `<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xm
 const createListElement = (listObj) => {
   const list = document.querySelector('ul');
   const li = document.createElement('li');
-  li.setAttribute('class', 'list_items');
+  if(listObj.isComplete) {
+    li.setAttribute('class', 'list_items completed');
+  }
+  else {
+    li.setAttribute('class', 'list_items');
+  }
   li.setAttribute('id', listObj.id);
   li.innerHTML = `
     ${listObj.text}
@@ -18,7 +23,7 @@ const createListElement = (listObj) => {
         ${deleteButton}
       </button>
       <div class="divider"></div>
-      <button type="button" class="complete" id="${listObj.id}">
+      <button type="button" class="complete ${listObj.isComplete ? 'completed':''}" id="${listObj.id}">
         ${completeButton}
       </button>
     </div>
@@ -28,28 +33,45 @@ const createListElement = (listObj) => {
 
 
 const listItems = [];
+// Store the listItems to localStorage
+const saveList = (listItems) => {
+  localStorage.setItem(`listItems`, JSON.stringify(listItems));
+}
 // Write a function that creates listObj and renders the list items.
 const renderTodo = (item) => {
   const listObj = {
     id: Date.now(),
-    text: item
-
+    text: item,
+    isComplete: false
   };
   // append the listObject to the listItems array
   listItems.push(listObj);
   // Every time the listItems array gets updated, store it in localStorage.
-  localStorage.setItem(`listItems`, JSON.stringify(listItems));
+  saveList(listItems);
   createListElement(listObj);
 };
+
+const deleteItem = (target, parentElement) => {
+  const index = listItems.findIndex(item => item.id == target.id);
+  //remove the target <li> and listObj.
+  parentElement.remove();
+  listItems.splice(index, 1);
+}
+
+const completeItem = (target, parentElement) => {
+  const index = listItems.findIndex(item => item.id == target.id);
+  target.classList.toggle('completed')
+  let toggle = parentElement.classList.toggle('completed')
+  listItems[index].isComplete = toggle ? true : false;
+}
 
 // Event-submit
 const form = document.querySelector('.form');
 form.addEventListener('submit', event => {
-  // Store the input values from the input element into a variable.
-  const input = document.querySelector('.input');
-  event.preventDefault(); // prevent app from auto-refreshing
+  
+  event.preventDefault(); 
+  const input = document.querySelector('.input'); // Store the input values from the input element into a variable.
   const item = input.value.trim();
-  // call createListElement() to add input value as a list item.
   if(item !== '') {
     renderTodo(item);
     input.value = ''; // resets the value
@@ -62,37 +84,26 @@ form.addEventListener('submit', event => {
 const list = document.querySelector('ul');
 list.addEventListener('click', event => {
   const target = event.target
-  const parentElement = list.querySelector(`[id='${target.id}']`); // Find the parent element of the target using the target id and store up in parentElement.
-  // if clicked element(button) contains 'complete' class,
+  // Find the parent element of the target using the target id and store up in parentElement.
+  const parentElement = list.querySelector(`[id='${target.id}']`); 
+  // if the target contains .complete, toggle the button and stikethrough text. Then, save the updated listItems to the localStorage
   if(target.classList.contains('complete')) {
-    // add 'completed' class to the button and cross out the item
-    target.classList.toggle('completed')
-    parentElement.classList.toggle('completed')
+    completeItem(target, parentElement);
+    saveList(listItems);
   }
-  // if clicked element(button) contains 'delete' class,
+  // if the target contains .delete, remove the item and save the updated listItems to the localStorage 
   if(target.classList.contains('delete')) {
-    //remove the entire list item.
-    parentElement.remove();
-    for (x of listItems) {
-      if(x.id === target.id){
-          listItems.pop(x)
-          
-          // localStorage.setItem(`listItems`, JSON.stringify(listItems));
-      }
-      else {
-        console.log(`${typeof x.id} ${typeof target.id}`)
-      }
-    }
-    console.log(listItems)
-
+    deleteItem(target, parentElement);
+    saveList(listItems);
   }
 })
 
+
 // If listItems is stored in the local storage, re-create the list elements 
 if(localStorage.listItems !== undefined) {
-  const storedList = JSON.parse(localStorage.listItems)
-  for (listObj of storedList) {
+  const savedList = JSON.parse(localStorage.listItems)
+  for (listObj of savedList) {
     listItems.push(listObj); // Populate the listItems array with listObj from localStorage
-    createListElement(listObj);
+    createListElement(listObj); // Render stored list items
   };
 }
